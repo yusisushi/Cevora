@@ -6,5 +6,3 @@ function Fucntionname {
 }
 
 Fucntionname
-
-#test comment line
