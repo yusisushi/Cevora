@@ -1,1 +1,0 @@
-Get-Process | Get-Random | Stop-Process -WhatIf
