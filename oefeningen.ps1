@@ -55,4 +55,8 @@ $test123.GetType()
 
 "a" -eq "b"
 
+#AND parameters;
+Get-Process |Where-Object StartupType -eq *a* |Where-Object Status -eq *S*
+
+#OR parameters -> brackets necessary;
 Get-service |Where-Object {$_.Status -eq 'stopped'  -or $_.Status -eq 'running'}
