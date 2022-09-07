@@ -8,25 +8,24 @@ Get-Help Set-Alias -Examples
 
 Set-Alias -Name 'grep' -Value select-string
 
-{#HASH TABLES
-    $proces=@{
-        Label="Process Name";
-        Expression={$_.name};
-        alignment="left"}
+{#HASH TABLES -> Format your own output
+$proces=@{
+    Label="Process Name";
+    Expression={$_.name};
+    alignment="left"}
 
-    $cpu=@{
-        Label="CPU Used";
-        Expression={$_.CPU};
-        FormatString="N3"}
+$cpu=@{
+    Label="CPU Used";
+    Expression={$_.CPU};
+    FormatString="N3"}
 
-    $mem=@{
-        Label="Memory";
-        Expression={$_PM/1MB}}
+$mem=@{
+    Label="Memory";
+    Expression={$_PM/1MB}}
+Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
 }
 
 {#OEFENINGEN
-Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
-
 #show visual gridview and use input as pipe to command
 Get-Process |Out-GridView -Title "hello world" -PassThru |stop-process #execute with enter
 
