@@ -38,3 +38,21 @@ $mem=@{
     Expression={$_PM/1MB}}
 
 Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
+
+#show visual gridview and use input as pipe to command
+Get-Process |Out-GridView -Title "hello world" -PassThru |stop-process #execute with enter
+
+#Show name, CPU-usage and (nonpaged)memory of all processes starting with “N”
+Get-Process -Name N* |ft name, NonpagedSystemMemorySize*
+
+#Show all services starting with “A” in a list
+Get-Service -Name A* |fl
+
+#Write your name on the screen, in red with a green background (what Joe, Jack, William and Averell won’t like)
+Write-Host "Yuska" -ForegroundColor red -BackgroundColor green
+
+#Show all services with startuptype “automatic” that are not running in a gridview
+Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView
+
+#Make sure you can click “ok” in above gridview to start these services
+Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView -PassThru |Start-Process
