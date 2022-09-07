@@ -17,7 +17,7 @@ $proces=@{
 $cpu=@{
     Label="CPU Used";
     Expression={$_.CPU};
-    FormatString="N3"}
+    FormatString="N3"} #numbers after comma
 
 $mem=@{
     Label="Memory";
