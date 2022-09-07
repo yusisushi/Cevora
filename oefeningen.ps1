@@ -8,9 +8,7 @@ Get-Help Set-Alias -Examples
 
 Set-Alias -Name 'grep' -Value select-string
 
-### Display info;###
-
-#On the screen
+{#DISPLAY INFO
     Format-Table name, cpu, *id* -AutoSize
     Format-List
     Write-Host, Write-Output
@@ -21,22 +19,25 @@ Set-Alias -Name 'grep' -Value select-string
     Export-CSV
     ConvertTo-XML
     Export-Cli
+}
 
-#Hash tables
-$proces=@{
-    Label="Process Name";
-    Expression={$_.name};
-    alignment="left"}
+{#HASH TABLES
+    $proces=@{
+        Label="Process Name";
+        Expression={$_.name};
+        alignment="left"}
 
-$cpu=@{
-    Label="CPU Used";
-    Expression={$_.CPU};
-    FormatString="N3"}
+    $cpu=@{
+        Label="CPU Used";
+        Expression={$_.CPU};
+        FormatString="N3"}
 
-$mem=@{
-    Label="Memory";
-    Expression={$_PM/1MB}}
+    $mem=@{
+        Label="Memory";
+        Expression={$_PM/1MB}}
+}
 
+{#OEFENINGEN
 Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
 
 #show visual gridview and use input as pipe to command
@@ -56,3 +57,15 @@ Get-Service |select status,name,startuptype |Where-Object StartupType -eq automa
 
 #Make sure you can click “ok” in above gridview to start these services
 Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView -PassThru |Start-Process
+}
+
+{ ### Reading Get-Date objects (System.DateTime)
+Get-Date
+$test123 = 123
+$test123.GetType()
+Set-Variable test123 abc
+$test123.GetType()
+}
+
+"a" -eq "b"
+Get-service |Where-Object { $_.StartType -contains 'a'  -or $_.Status -contains 'S'} 
