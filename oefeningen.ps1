@@ -68,4 +68,5 @@ $test123.GetType()
 }
 
 "a" -eq "b"
-Get-service |Where-Object { $_.StartType -contains 'a'  -or $_.Status -contains 'S'} 
+
+Get-service |Where-Object { $_.Status -eq 'stopped'  -or $_.Status -eq 'running'}
