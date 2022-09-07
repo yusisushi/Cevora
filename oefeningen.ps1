@@ -8,19 +8,6 @@ Get-Help Set-Alias -Examples
 
 Set-Alias -Name 'grep' -Value select-string
 
-{#DISPLAY INFO
-    Format-Table name, cpu, *id* -AutoSize
-    Format-List
-    Write-Host, Write-Output
-    Out-Gridview
-#In a file
-    Out-File
-    Out-Printer
-    Export-CSV
-    ConvertTo-XML
-    Export-Cli
-}
-
 {#HASH TABLES
     $proces=@{
         Label="Process Name";
@@ -59,7 +46,7 @@ Get-Service |select status,name,startuptype |Where-Object StartupType -eq automa
 Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView -PassThru |Start-Process
 }
 
-{ ### Reading Get-Date objects (System.DateTime)
+{#Reading Get-Date objects (System.DateTime)
 Get-Date
 $test123 = 123
 $test123.GetType()
