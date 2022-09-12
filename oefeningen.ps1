@@ -25,7 +25,7 @@ $mem=@{
 Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
 }
 
-{#OEFENINGEN
+#OEFENINGEN
 #show visual gridview and use input as pipe to command
 Get-Process |Out-GridView -Title "hello world" -PassThru |stop-process #execute with enter
 
@@ -43,20 +43,76 @@ Get-Service |select status,name,startuptype |Where-Object StartupType -eq automa
 
 #Make sure you can click “ok” in above gridview to start these services
 Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView -PassThru |Start-Process
-}
 
-{#Reading Get-Date objects (System.DateTime)
-Get-Date
+
+#Reading Get-Date objects (System.DateTime)
+Get-Date add 5
+
+
+### vars
 $test123 = 123
 $test123.GetType()
 Set-Variable test123 abc
 $test123.GetType()
-}
 
 "a" -eq "b"
 
+
+{ ###Filtering output
 #AND parameters;
 Get-Process |Where-Object StartupType -eq *a* |Where-Object Status -eq *S*
+Get-Process |Where-Object {$_.Name -like "*N*" -and $_.Name -like "*pad*"} #-> quotation marks important!
 
 #OR parameters -> brackets necessary;
 Get-service |Where-Object {$_.Status -eq 'stopped'  -or $_.Status -eq 'running'}
+
+#filter max output
+Get-Process |Sort-Object CPU  |Select-Object -first 5
+
+Get-Process |Get-Member 
+Get-Process |Select-Object name,cpu |Get-Member
+
+#Filtering result vs filtering visible output
+Get-Process |Select-Object name,cpu
+Get-Process |Format-Table name,cpu
+Get-Process |Format-list name,cpu
+
+#display name in UPPERCASE
+Get-Process |Select-Object @{Name="UPNAME";Expression={"$($_.Name.ToUpper())"}}, CPU
+
+$namestring = (Get-Process notepad).name
+$namestring |Get-Member
+
+#view all parameters for Get-Process command
+Get-Command Get-Process
+Get-Command Get-Process |get-member
+Get-Command Get-Process |Select-Object -ExpandProperty parameters
+
+#Group-Object
+Get-Process |Get-Member |Sort-Object Name
+Get-Process |Group-Object Company
+
+Get-Process |measure-Object CPU |Get-Member
+Get-Process notepad |measure-Object CPU -Sum -Average
+}
+
+{#Object-exercises
+#How long has my CPU been used in minutes?
+#Get-Process |Get-Member -> CPU = {get=$this.TotalProcessorTime.TotalSeconds;}
+(Get-Process |Measure-Object cpu -Sum).sum # in SECONDS
+(Get-Process |Measure-Object cpu -Sum).sum /60 #in m
+(Get-Process |Measure-Object cpu -Sum).sum /60 /60 #in hours
+(Get-Process |Measure-Object cpu -Sum).sum /60 /60 /24 #in days
+
+#Get all services with a name longer than 7 characters
+Get-Service |Where-Object {$_.Name -like "????????"}
+Get-Service -Name "????????"
+
+#What percentage of CPU are the 5 most CPU-intensive processes responsible for?
+/
+
+#From the Systemeventlog, show all messages Since 24 hours ago
+Get-WinEvent -LogName system |Where-Object {$_.TimeCreated -ge (Get-Date).AddDays(-1) }
+
+#That occured yesterday
+}
