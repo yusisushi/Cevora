@@ -124,3 +124,20 @@ Get-WinEvent -LogName system |Where-Object {$_.TimeCreated -ge (Get-Date).AddDay
 /
 #endregion
 
+
+#region VARIABLE TYPES
+$a = 5 #will become suiteable datatype
+$a = [int] 5 #will become integer
+$a = [int] 5.6 #will become integer number 6
+
+$d = [datetime] "01/17/1997" #will become date MM/DD/YYYY -> !
+
+#endregion
+
+$args.ToUpper() #script to convert text to uppercase
+$args[2] #select second word
+
+#set var read only
+Set-Variable testfixedvar test123 -Option ReadOnly
+#backtick
+Write-Host "the value of `$testfixedvar is $testfixedvar"
