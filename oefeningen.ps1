@@ -8,7 +8,8 @@ Get-Help Set-Alias -Examples
 
 Set-Alias -Name 'grep' -Value select-string
 
-{#HASH TABLES -> Format your own output
+
+#region HASH TABLES -> Format your own output
 $proces=@{
     Label="Process Name";
     Expression={$_.name};
@@ -23,9 +24,11 @@ $mem=@{
     Label="Memory";
     Expression={$_PM/1MB}}
 Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
-}
 
-#OEFENINGEN
+#endregion
+
+
+#region OEFENINGEN
 #show visual gridview and use input as pipe to command
 Get-Process |Out-GridView -Title "hello world" -PassThru |stop-process #execute with enter
 
@@ -44,6 +47,8 @@ Get-Service |select status,name,startuptype |Where-Object StartupType -eq automa
 #Make sure you can click “ok” in above gridview to start these services
 Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView -PassThru |Start-Process
 
+#endregion
+
 
 #Reading Get-Date objects (System.DateTime)
 Get-Date add 5
@@ -58,7 +63,7 @@ $test123.GetType()
 "a" -eq "b"
 
 
-{ ###Filtering output
+#region Filtering output
 #AND parameters;
 Get-Process |Where-Object StartupType -eq *a* |Where-Object Status -eq *S*
 Get-Process |Where-Object {$_.Name -like "*N*" -and $_.Name -like "*pad*"} #-> quotation marks important!
@@ -94,9 +99,10 @@ Get-Process |Group-Object Company
 
 Get-Process |measure-Object CPU |Get-Member
 Get-Process notepad |measure-Object CPU -Sum -Average
-}
+#endregion
 
-{#Object-exercises
+
+#region Object-exercises
 #How long has my CPU been used in minutes?
 #Get-Process |Get-Member -> CPU = {get=$this.TotalProcessorTime.TotalSeconds;}
 (Get-Process |Measure-Object cpu -Sum).sum # in SECONDS
@@ -115,4 +121,6 @@ Get-Service -Name "????????"
 Get-WinEvent -LogName system |Where-Object {$_.TimeCreated -ge (Get-Date).AddDays(-1) }
 
 #That occured yesterday
-}
+/
+#endregion
+
