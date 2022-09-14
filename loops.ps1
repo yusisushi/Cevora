@@ -116,16 +116,99 @@ Get-WinEvent -LogName system |Where-Object {$_.TimeCreated -ge (Get-Date).AddDay
 $a = 5 #will become suiteable datatype
 $a = [int] 5 #will become integer
 $a = [int] 5.6 #will become integer number 6
-
-$d = [datetime] "01/17/1997" #will become date MM/DD/YYYY -> !
-
-$args.ToUpper() #script to convert text to uppercase
-$args[2] #select second word
+$a = [datetime] "01/17/1997" #will become date MM/DD/YYYY if recognized as date
+$a.ToUpper() #script to convert text to uppercase
+$a[2] #select second word
+$a.Trim()
+$a.Trim("a","b","c")
 
 #set var read only
 Set-Variable testfixedvar test123 -Option ReadOnly
 #backtick
 Write-Host "the value of `$testfixedvar is $testfixedvar"
 
+$var = "b"
+# the instance way
+if($var.Equals("b")){
+    Write-Host "Equal"}
+else{
+    Write-Host "Not equal" }  
+
+$var = "b"
+# the instance way
+if($var.Equals("b")) {    Write-Host "Equal" } else {    Write-Host "Not equal" }  
+    
+
 #endregion
-test
+
+#region ARRAYS
+#strongly typed array
+$array = "one", "two", "three" #Any sequence of comma separated values is an array
+$array = 1, "two", (1/3) #Datatypes don’t need to be the same (but should)
+$array = @(1, "two", (1/3)) #You can also explicitly create an array…
+
+#Multi-dimensional array
+$array[0]       # 1, 2 and 3 (seperate lines)
+$array[1][2]    # six
+$array[2]       # 7, but very bad programming 
+
+#adding values
+$array = "one","two","three"
+$array
+$array[0] # -> show first item
+
+$array = 1,2,3     # 1,2,3
+$array += 4        # 1,2,3,4
+$array[4] = 5      # Next index: error
+$array[7] = 6      # Skipping indexes: error
+$array.Add(6)      # error 
+#endregion
+
+#string mu
+$string = "*="
+$LongString = $string*20
+$LongString
+"$LongString"
+" nr of characters: " + $LongString.length
+
+#type operators
+1000/3 -as [int] #display as integer (whole number)
+1000/3 -is [int] #is this an integer?
+(1000/3) -is [int]
+
+
+#region SCRIPTING
+###if statements
+$i = 11
+if ($i -lt 10) {
+    "smaller than 10"<# Action to perform if the condition is true #>
+}
+elseif ($i -lt 50) {
+    "smaller than 50"<# Action when this condition is true #>
+}
+else {
+    "larger than or equal to 50"
+}
+
+###switch statements
+$i = 22
+switch ($i) {
+    1 {  
+        "one"
+    }
+    5 {
+        "five"
+    }
+    10 {
+        "ten"
+    }
+    default {
+        "default"
+    }
+
+}
+
+###foreach loop
+
+
+#endregion
