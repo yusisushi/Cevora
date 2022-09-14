@@ -50,20 +50,7 @@ Get-Service |select status,name,startuptype |Where-Object StartupType -eq automa
 #endregion
 
 
-#Reading Get-Date objects (System.DateTime)
-Get-Date add 5
-
-
-### vars
-$test123 = 123
-$test123.GetType()
-Set-Variable test123 abc
-$test123.GetType()
-
-"a" -eq "b"
-
-
-#region Filtering output
+#region FILTER OUTPUT
 #AND parameters;
 Get-Process |Where-Object StartupType -eq *a* |Where-Object Status -eq *S*
 Get-Process |Where-Object {$_.Name -like "*N*" -and $_.Name -like "*pad*"} #-> quotation marks important!
@@ -102,7 +89,7 @@ Get-Process notepad |measure-Object CPU -Sum -Average
 #endregion
 
 
-#region Object-exercises
+#region OBJECT-EXERCISES
 #How long has my CPU been used in minutes?
 #Get-Process |Get-Member -> CPU = {get=$this.TotalProcessorTime.TotalSeconds;}
 (Get-Process |Measure-Object cpu -Sum).sum # in SECONDS
@@ -132,8 +119,6 @@ $a = [int] 5.6 #will become integer number 6
 
 $d = [datetime] "01/17/1997" #will become date MM/DD/YYYY -> !
 
-#endregion
-
 $args.ToUpper() #script to convert text to uppercase
 $args[2] #select second word
 
@@ -141,3 +126,6 @@ $args[2] #select second word
 Set-Variable testfixedvar test123 -Option ReadOnly
 #backtick
 Write-Host "the value of `$testfixedvar is $testfixedvar"
+
+#endregion
+test
