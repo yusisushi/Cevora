@@ -1,146 +1,3 @@
-#Wildcards
-
-A* #alles die begint met 'A'
-Alex?nder #alles met eender welk karakter ipv '?'
-Alex[abc]nder #alles met a,b of c tussen brackets
-
-Get-Help Set-Alias -Examples
-
-Set-Alias -Name 'grep' -Value select-string
-
-
-#region HASH TABLES -> Format your own output
-$proces=@{
-    Label="Process Name";
-    Expression={$_.name};
-    alignment="left"}
-
-$cpu=@{
-    Label="CPU Used";
-    Expression={$_.CPU};
-    FormatString="N3"} #numbers after comma
-
-$mem=@{
-    Label="Memory";
-    Expression={$_PM/1MB}}
-Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
-
-#endregion
-
-
-#region OEFENINGEN
-#show visual gridview and use input as pipe to command
-Get-Process |Out-GridView -Title "hello world" -PassThru |stop-process #execute with enter
-
-#Show name, CPU-usage and (nonpaged)memory of all processes starting with “N”
-Get-Process -Name N* |ft name, NonpagedSystemMemorySize*
-
-#Show all services starting with “A” in a list
-Get-Service -Name A* |fl
-
-#Write your name on the screen, in red with a green background (what Joe, Jack, William and Averell won’t like)
-Write-Host "Yuska" -ForegroundColor red -BackgroundColor green
-
-#Show all services with startuptype “automatic” that are not running in a gridview
-Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView
-
-#Make sure you can click “ok” in above gridview to start these services
-Get-Service |select status,name,startuptype |Where-Object StartupType -eq automatic |Where-Object Status -eq stopped |Out-GridView -PassThru |Start-Process
-
-#endregion
-
-
-#region FILTER OUTPUT
-#AND parameters;
-Get-Process |Where-Object StartupType -eq *a* |Where-Object Status -eq *S*
-Get-Process |Where-Object {$_.Name -like "*N*" -and $_.Name -like "*pad*"} #-> quotation marks important!
-
-#OR parameters -> brackets necessary;
-Get-service |Where-Object {$_.Status -eq 'stopped'  -or $_.Status -eq 'running'}
-
-#filter max output
-Get-Process |Sort-Object CPU  |Select-Object -first 5
-
-Get-Process |Get-Member 
-Get-Process |Select-Object name,cpu |Get-Member
-
-#Filtering result vs filtering visible output
-Get-Process |Select-Object name,cpu
-Get-Process |Format-Table name,cpu
-Get-Process |Format-list name,cpu
-
-#display name in UPPERCASE
-Get-Process |Select-Object @{Name="UPNAME";Expression={"$($_.Name.ToUpper())"}}, CPU
-
-$namestring = (Get-Process notepad).name
-$namestring |Get-Member
-
-#view all parameters for Get-Process command
-Get-Command Get-Process
-Get-Command Get-Process |get-member
-Get-Command Get-Process |Select-Object -ExpandProperty parameters
-
-#Group-Object
-Get-Process |Get-Member |Sort-Object Name
-Get-Process |Group-Object Company
-
-Get-Process |measure-Object CPU |Get-Member
-Get-Process notepad |measure-Object CPU -Sum -Average
-#endregion
-
-
-#region OBJECT-EXERCISES
-#How long has my CPU been used in minutes?
-#Get-Process |Get-Member -> CPU = {get=$this.TotalProcessorTime.TotalSeconds;}
-(Get-Process |Measure-Object cpu -Sum).sum # in SECONDS
-(Get-Process |Measure-Object cpu -Sum).sum /60 #in m
-(Get-Process |Measure-Object cpu -Sum).sum /60 /60 #in hours
-(Get-Process |Measure-Object cpu -Sum).sum /60 /60 /24 #in days
-
-#Get all services with a name longer than 7 characters
-Get-Service |Where-Object {$_.Name -like "????????"}
-Get-Service -Name "????????"
-
-#What percentage of CPU are the 5 most CPU-intensive processes responsible for?
-/
-
-#From the Systemeventlog, show all messages Since 24 hours ago
-Get-WinEvent -LogName system |Where-Object {$_.TimeCreated -ge (Get-Date).AddDays(-1) }
-
-#That occured yesterday
-/
-#endregion
-
-
-#region VARIABLE TYPES
-$a = 5 #will become suiteable datatype
-$a = [int] 5 #will become integer
-$a = [int] 5.6 #will become integer number 6
-$a = [datetime] "01/17/1997" #will become date MM/DD/YYYY if recognized as date
-$a.ToUpper() #script to convert text to uppercase
-$a[2] #select second word
-$a.Trim()
-$a.Trim("a","b","c")
-
-#set var read only
-Set-Variable testfixedvar test123 -Option ReadOnly
-#backtick
-Write-Host "the value of `$testfixedvar is $testfixedvar"
-
-$var = "b"
-# the instance way
-if($var.Equals("b")){
-    Write-Host "Equal"}
-else{
-    Write-Host "Not equal" }  
-
-$var = "b"
-# the instance way
-if($var.Equals("b")) {    Write-Host "Equal" } else {    Write-Host "Not equal" }  
-    
-
-#endregion
-
 #region ARRAYS
 #strongly typed array
 $array = "one", "two", "three" #Any sequence of comma separated values is an array
@@ -162,9 +19,10 @@ $array += 4        # 1,2,3,4
 $array[4] = 5      # Next index: error
 $array[7] = 6      # Skipping indexes: error
 $array.Add(6)      # error 
+
 #endregion
 
-#string mu
+#string m
 $string = "*="
 $LongString = $string*20
 $LongString
@@ -177,8 +35,7 @@ $LongString
 (1000/3) -is [int]
 
 
-#region SCRIPTING
-###if statements
+#region IF ELSE SWITCH LOOP
 $i = 11
 if ($i -lt 10) {
     "smaller than 10"<# Action to perform if the condition is true #>
@@ -193,8 +50,8 @@ else {
 ###switch statements
 $i = 22
 switch ($i) {
-    1 {  
-        "one"
+    1 {  #if $i is 1
+        "one" #write one
     }
     5 {
         "five"
@@ -209,6 +66,46 @@ switch ($i) {
 }
 
 ###foreach loop
+$procs = Get-Process
+foreach($p in $procs){
+    $p.ProcessName.ToUpper()
+}
 
+foreach($p in $procs){
+    $p.Id.ToString()
+}
+#Combine them
+foreach($p in $procs){
+    ($p.ProcessName.ToUpper() + " " + $p.Id.ToString())
+}
 
+#get random number for var $i until $i is 15 or greater
+$i = 0
+while ($i -lt 15) {
+    $i = Get-Random -Minimum 1 -Maximum 20
+    Start-Sleep -Seconds 0.1
+    Write-Host $i
+}
+
+#increase with +1 until $1 is 10 or higher
+$i = 0
+Do {
+    $i++ #++ = +1 
+    $i #write var value
+} while ($i -lt 10) 
+
+#for loop
+#dotcomma: FOR ; WHILE ; DO # UNREADEABLE # MAKE READEABLE
+$array = 1,2,3,'a','b','c'
+for ($i = 0; $i -lt $array.Count; $i++) {
+    $array[$i]
+}
+
+#readeable
+$array = 1,2,3,'a','b','c'
+$i = 0
+while ($i -lt $array.Count) {
+    $i++
+    $i
+}
 #endregion

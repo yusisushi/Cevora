@@ -22,7 +22,8 @@ $cpu=@{
 
 $mem=@{
     Label="Memory";
-    Expression={$_PM/1MB}}
+    Expression={$_PM/1MB}
+}
 Get-Process -Name *edge* |ft $proces,$cpu,$mem -AutoSize
 
 #endregion
@@ -115,7 +116,7 @@ $a = [datetime] "01/17/1997" #will become date MM/DD/YYYY if recognized as date
 $a.ToUpper() #script to convert text to uppercase
 $a[2] #select second word
 $a.Trim()
-$a.Trim("a","b","c")
+$a.Trim("a","b","c") 
 
 #set var read only
 Set-Variable testfixedvar test123 -Option ReadOnly
