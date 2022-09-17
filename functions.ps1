@@ -5,7 +5,7 @@ Function Example{
 }
 Example
 
-#PRIVATE var (readeable outside of function)
+#GLOBAL var (readeable outside of function)
 Function Example{
 	$global:nr = 9
 	Write-Host "Nr: $nr" # 9

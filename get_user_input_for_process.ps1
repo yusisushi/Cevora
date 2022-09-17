@@ -23,23 +23,22 @@ function inputid {
         $id=@{Label="Process-Id";Expression={$_.Id}}
         $result |Format-Table $name,$id
         $userinput = Read-Host "Process Id"
-        if (-not($result.id -contains $userinput)){
+        if (-not($result.id -contains $userinput)){ #if array doesn't contain input, call function again
             inputid
         }
         else {
-            $i = [int] 0
-            Write-Host "Match, stopping process." -NoNewline
-            Stop-Process -Id $userinput
+            Stop-Process -Id $userinput #if result contains input, kill the corresponding process
+            $i = [int] 0 
+            Write-Host "Match, stopping process." -NoNewline #display fake progressbar
             while ($i -lt 10){
                 $i++
                 Write-Host "." -NoNewline
-                Start-Sleep -m 500
+                Start-Sleep -m 100
             }
         }
     }
 }
 
-inputid #runs only once but has a loop inside
+inputid 
+Write-Host "All done"#runs only once but has a loop inside
 exit
-
-

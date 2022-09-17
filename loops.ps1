@@ -1,8 +1,9 @@
 #region ARRAYS
 #strongly typed array
-$array = "one", "two", "three" #Any sequence of comma separated values is an array
+$array = @("one", "two", "three") #Any sequence of comma separated values is an array
 $array = 1, "two", (1/3) #Datatypes don’t need to be the same (but should)
 $array = @(1, "two", (1/3)) #You can also explicitly create an array…
+$array = @(3) #set var as array type
 
 #Multi-dimensional array
 $array[0]       # 1, 2 and 3 (seperate lines)
@@ -24,7 +25,7 @@ $array.Add(6)      # error
 
 #string m
 $string = "*="
-$LongString = $string*20
+$LongString = $string*20 #output = string 20 times
 $LongString
 "$LongString"
 " nr of characters: " + $LongString.length
